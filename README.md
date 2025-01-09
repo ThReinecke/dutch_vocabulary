@@ -7,13 +7,11 @@ This project automates the daily delivery of an email containing three C1-level 
 
 
 ## Motivation
-I created this project because I couldn't find a suitable app to help me build a C1-level Dutch vocabulary. I discovered that ChatGPT provides good word suggestions and decided to automate the process. Additionally, I know that I check emails more consistently than apps, making this method more effective for learning.
-
-This project also provided an opportunity to refresh my skills in **Terraform** and **Python**.
+I created this project because I couldn't find a suitable app to help me build a C1-level Dutch vocabulary. I discovered that ChatGPT provides good word suggestions and decided to automate the process. Additionally, I check emails more consistently than apps, making this method more effective for learning. Of course, this doesn't replace language courses or sophisticated language apps, but it's a good way to stay engaged with a language.
 
 
 ## Simplified Architecture
-A CloudWatch Event Rule triggers a Lambda each morning at 7:00. The Lambda retrieves all previously sent Dutch words from DynamoDB. It then retrieves three new words from ChatGPT, stores them in DynamoDB, and sends them to SES. SES delivers them to the end user's email.
+A CloudWatch Event Rule triggers a Lambda daily. The Lambda retrieves all previously sent Dutch words from DynamoDB. It then retrieves three new words from ChatGPT, stores them in DynamoDB, and sends them to SES. SES delivers them to the end user's email.
 
 ![Picture of architecture](/images/architecture.jpg)
 
@@ -39,9 +37,8 @@ To deploy this project, ensure the following tools and configurations are in pla
    Reference: [Verifying Email Addresses in Amazon SES](https://docs.aws.amazon.com/ses/latest/dg/creating-identities.html#verify-email-addresses-procedure).
 
 4. **Optional:**
-   You can zip the Lambda deployment package manually if you like:
+   If you make changes to the code, you will need to zip the Lambda deployment package again:
    - Use the provided `setup.sh` script or follow the steps in the script manually (might need small modifications if on Mac/Linux)
-   - Alternatively, use the pre-zipped package: `deployment_package.zip`.
 
 ### Deployment Steps
 
@@ -58,8 +55,5 @@ To deploy this project, ensure the following tools and configurations are in pla
 
 ## Considerations
 
-This project was intended as a **weekend project**, so there is room for improvement. Potential enhancements include:
-- Refactoring the Python code to be asynchronous for better performance and robustness.
-- Splitting the `lambda_function.py` file into smaller modules for better organization and maintainability.
-
-However, since the project fulfills its purpose and is unlikely to grow further, I kept the implementation simple.
+- The emails don't replace language learning with courses, apps, or dedicated vocabulary training. It's just a great way to stay engaged with the language.
+- The same goal might be achievable with other automation, code, or no-code tools, but I prefer having industry-wide known services/tools like AWS and Terraform that more people are familiar with.
