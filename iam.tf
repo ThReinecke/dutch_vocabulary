@@ -67,5 +67,5 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_invoke" {
   action        = "lambda:InvokeFunction"
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.daily_trigger.arn
-  function_name = aws_lambda_function.hello_world_lambda.function_name
+  function_name = aws_lambda_function.vocabulary_lambda.function_name
 }

@@ -29,16 +29,18 @@ To deploy this project, ensure the following tools and configurations are in pla
    - Terraform (Tested with Terraform 1.10.3)
    - AWS CLI (Tested with 2.15.58)
 
+   (If you would like to contribute, you also need the packages in the requirements.txt file installed as well as tflint: https://github.com/terraform-linters/tflint)
+
 2. **Permissions:**
    Your AWS CLI user must have the appropriate permissions to deploy the resources. Refer to the Terraform files and apply the principle of least privilege.
 
 3. **Amazon SES Verified Email:**
-   You need a verified email address in Amazon SES. This email must match the one used in the project.  
+   You need a verified email address in Amazon SES. This email must match the one used in the project.
    Reference: [Verifying Email Addresses in Amazon SES](https://docs.aws.amazon.com/ses/latest/dg/creating-identities.html#verify-email-addresses-procedure).
 
-4. **Optional:**  
+4. **Optional:**
    You can zip the Lambda deployment package manually if you like:
-   - Use the provided `setup.sh` script or follow the steps in the script manually (might need small modifications if on Mac/Linux)  
+   - Use the provided `setup.sh` script or follow the steps in the script manually (might need small modifications if on Mac/Linux)
    - Alternatively, use the pre-zipped package: `deployment_package.zip`.
 
 ### Deployment Steps
