@@ -4,11 +4,6 @@ variable "region" {
   default     = "us-east-1"
 }
 
-variable "account_id" {
-  description = "The AWS account ID."
-  type        = string
-}
-
 variable "ses_email" {
   description = "The verified email address for SES."
   type        = string

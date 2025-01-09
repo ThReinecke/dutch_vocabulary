@@ -3,15 +3,19 @@ from typing import Any, List, Dict
 import boto3
 from openai import OpenAI
 
-# HELPER FUNCTIONS ------------------------------------------------------------------
+# HELPER FUNCTIONS
+
 
 def get_ssm_parameter(parameter_name: str) -> str:
     try:
-        response = ssm_client.get_parameter(Name=parameter_name, WithDecryption=True)
+        response = ssm_client.get_parameter(
+            Name=parameter_name, WithDecryption=True
+        )
         return response["Parameter"]["Value"]
     except Exception as e:
         print(f"Error retrieving parameter {parameter_name} from SSM: {e}")
         raise
+
 
 def get_all_words() -> str:
     try:
@@ -23,15 +27,22 @@ def get_all_words() -> str:
         print(f"Error retrieving words from DynamoDB: {e}")
         raise
 
+
 def put_words_in_db_table(words: List[Dict[str, str]]) -> None:
     try:
         with table.batch_writer() as batch:
             for word_entry in words:
                 if not all(
-                    key in word_entry for key in ("word", "translation", "example")
+                    key in word_entry for key in (
+                                            "word",
+                                            "translation",
+                                            "example"
+                                        )
                 ):
                     raise ValueError(
-                        f"Invalid word entry: {word_entry}. Must contain 'word', 'translation', and 'example' keys."
+                        f"Invalid word entry: {word_entry}. "
+                        "Must contain 'word', 'translation', and "
+                        "'example' keys."
                     )
                 batch.put_item(
                     Item={
@@ -45,17 +56,22 @@ def put_words_in_db_table(words: List[Dict[str, str]]) -> None:
         print(f"Error inserting words into the DynamoDB table: {e}")
         raise
 
+
 def create_prompt(existing_words: str) -> str:
     return (
-        f"Provide exactly 3 words in Dutch at the C1 level, but none of those: {existing_words}. "
-        "Return them as an array of dictionaries. Each dictionary should include the fields: "
-        '"word" (the Dutch word), "translation" (the English translation), '
-        'and "example" (a sentence using the word in context). Example format: '
-        '[{"word": "word1", "translation": "example1", "example": "sentence1"}, '
-        '{"word": "word2", "translation": "example2", "example": "sentence2"}, '
-        '{"word": "word3", "translation": "example3", "example": "sentence3"}]. '
-        "Do not add any additional words, explanations, or introductions in your reply. Just return the array."
+        f"Provide exactly 3 words in Dutch at the C1 level, but none of "
+        f"those: {existing_words}. Return them as an array of dictionaries. "
+        f"Each dictionary should include the fields: 'word' (the Dutch word), "
+        f"'translation' (the English translation), and 'example' (a sentence "
+        f"using the word in context). Example format: "
+        "[{\"word\": \"word1\", \"translation\": \"example1\", "
+        "\"example\": \"sentence1\"}, {\"word\": \"word2\", "
+        "\"translation\": \"example2\", \"example\": \"sentence2\"}, "
+        "{\"word\": \"word3\", \"translation\": \"example3\", "
+        "\"example\": \"sentence3\"}]. Do not add any additional words, "
+        "explanations, or introductions in your reply."
     )
+
 
 # Initialize -------------------------------
 dynamodb = boto3.resource("dynamodb")
@@ -65,15 +81,17 @@ ses_client = boto3.client("ses")
 ses_email = get_ssm_parameter("EMAIL_FOR_SES")
 client = OpenAI(api_key=get_ssm_parameter("OPEN_AI_API_KEY"))
 
+
 # Lambda code -------------------------------
 def lambda_handler(event: Any, context: Any) -> Dict[str, Any]:
     """
-    Lambda function handler that retrieves words from the DynamoDB table, calls the OpenAI API to generate new words,
-    stores the words in DynamoDB, and sends an email with the words using AWS SES.
+    Lambda function handler that retrieves words from the DynamoDB table, calls
+    the OpenAI API to generate new words, stores the words in DynamoDB, and
+    sends an email with the words using AWS SES.
     """
     try:
         words = get_all_words()
-        prompt  = create_prompt(words)
+        prompt = create_prompt(words)
 
         response = client.chat.completions.create(
             model="gpt-4", messages=[{"role": "user", "content": prompt}]
@@ -86,14 +104,22 @@ def lambda_handler(event: Any, context: Any) -> Dict[str, Any]:
 
         # Format email for SES
         formatted_html = "<html><body>"
-        formatted_html += "<h2>🇳🇱 Jouw woorden voor vandaag</h2>"
+        formatted_html += "<h2>🇳🇱 Jouw woorden voor "
+        formatted_html += "vandaag</h2>"
         formatted_html += (
-            "<table border='1' cellpadding='10' style='border-collapse: collapse;'>"
+            "<table border='1' cellpadding='10' style='border-collapse: "
+            "collapse;'>"
         )
-        formatted_html += "<tr><th>Word</th><th>Translation</th><th>Example</th></tr>"
+        formatted_html += (
+            "<tr><th>Word</th><th>Translation</th>"
+            "<th>Example</th></tr>"
+        )
 
         for item in json_response:
-            formatted_html += f"<tr><td>{item['word']}</td><td>{item['translation']}</td><td>{item['example']}</td></tr>"
+            formatted_html += (
+                f"<tr><td>{item['word']}</td><td>{item['translation']}</td>"
+                f"<td>{item['example']}</td></tr>"
+            )
 
         formatted_html += "</table>"
         formatted_html += "</body></html>"
@@ -102,7 +128,8 @@ def lambda_handler(event: Any, context: Any) -> Dict[str, Any]:
             Source=ses_email,
             Destination={"ToAddresses": [ses_email]},
             Message={
-                "Subject": {"Data": "📚 Jouw dagelijkse woordenschat"},
+                "Subject": {"Data": "📚 Jouw dagelijkse woordenschat"
+                            },
                 "Body": {"Html": {"Data": formatted_html}},
             },
         )
