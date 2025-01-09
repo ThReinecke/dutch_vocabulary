@@ -22,8 +22,8 @@ A CloudWatch Event Rule triggers a Lambda daily. The Lambda retrieves all previo
 To deploy this project, ensure the following tools and configurations are in place:
 
 1. **Tools Installed:**
-   - Python (Tested with Python 3.8)
-   - pip (Tested with pip 19.2.3)
+   - Python (Tested with Python 3.12.8)
+   - pip (Tested with pip 24.3.1)
    - Terraform (Tested with Terraform 1.10.3)
    - AWS CLI (Tested with 2.15.58)
 

@@ -104,7 +104,7 @@ def lambda_handler(event: Any, context: Any) -> Dict[str, Any]:
 
         # Format email for SES
         formatted_html = "<html><body>"
-        formatted_html += "<h2>\uD83C\uDDF3\uD83C\uDDF1 Jouw woorden voor "
+        formatted_html += "<h2>🇳🇱 Jouw woorden voor "
         formatted_html += "vandaag</h2>"
         formatted_html += (
             "<table border='1' cellpadding='10' style='border-collapse: "
@@ -128,7 +128,7 @@ def lambda_handler(event: Any, context: Any) -> Dict[str, Any]:
             Source=ses_email,
             Destination={"ToAddresses": [ses_email]},
             Message={
-                "Subject": {"Data": "\uD83D\uDCD9 Jouw dagelijkse woordenschat"
+                "Subject": {"Data": "📚 Jouw dagelijkse woordenschat"
                             },
                 "Body": {"Html": {"Data": formatted_html}},
             },
