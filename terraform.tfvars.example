@@ -1,4 +1,3 @@
 region     = ""
-account_id = ""
 ses_email  = ""
 open_ai_api_key = ""
