@@ -1,17 +1,23 @@
-# Daily Dutch Vocabulary Email Automation
+# Daily Vocabulary Email Automation
 
 ## Overview
-This project automates the daily delivery of an email containing three C1-level Dutch words, their English translations, and example sentences. The email looks like this:
+This project automates the daily delivery of an email containing three words (language and difficulty of your choice), their translations, and example sentences.
 
-![Screenshot of email](/images/email.png)
+**Example email for Dutch, C1 level, with English translations**
+<kbd>![Screenshot of Dutch email](/images/email.png)</kbd>
+
+**Example email for French, B2 level, with German translations**
+<kbd>![Screenshot of French email](/images/frenchEmail.png)</kbd>
+
+This project leverages ChatGPT as the vocabulary source. Therefore, the quality of words, translations, and examples for each language depends on ChatGPT's familiarity and knowledge of the desired language.
 
 
 ## Motivation
-I created this project because I couldn't find a suitable app to help me build a C1-level Dutch vocabulary. I discovered that ChatGPT provides good word suggestions and decided to automate the process. Additionally, I check emails more consistently than apps, making this method more effective for learning. Of course, this doesn't replace language courses or sophisticated language apps, but it's a good way to stay engaged with a language.
+I created this project because I couldn't find a suitable app to improve my C1-level Dutch vocabulary. I discovered that ChatGPT provides good word suggestions and decided to automate the process. Moreover, I check emails more consistently than apps, which makes this method more effective for learning. Of course, this doesn't replace language courses or sophisticated language apps, but it's a good way to stay engaged with a language.
 
 
 ## Simplified Architecture
-A CloudWatch Event Rule triggers a Lambda daily. The Lambda retrieves all previously sent Dutch words from DynamoDB. It then retrieves three new words from ChatGPT, stores them in DynamoDB, and sends them to SES. SES delivers them to the end user's email.
+A CloudWatch Event Rule triggers a Lambda daily. The Lambda retrieves all previously sent words from DynamoDB. It then retrieves three new words from ChatGPT, stores them in DynamoDB, and sends them to SES. SES delivers them to the end user's email.
 
 ![Picture of architecture](/images/architecture.jpg)
 
@@ -27,7 +33,7 @@ To deploy this project, ensure the following tools and configurations are in pla
    - Terraform (Tested with Terraform 1.10.3)
    - AWS CLI (Tested with 2.15.58)
 
-   (If you would like to contribute, you also need the packages in the requirements.txt file installed as well as tflint: https://github.com/terraform-linters/tflint)
+   (If you would like to contribute, you'll also need to install the packages in the `requirements.txt` file and tflint: https://github.com/terraform-linters/tflint)
 
 2. **Permissions:**
    Your AWS CLI user must have the appropriate permissions to deploy the resources. Refer to the Terraform files and apply the principle of least privilege.
@@ -38,15 +44,16 @@ To deploy this project, ensure the following tools and configurations are in pla
 
 4. **Optional:**
    If you make changes to the code, you will need to zip the Lambda deployment package again:
-   - Use the provided `setup.sh` script or follow the steps in the script manually (might need small modifications if on Mac/Linux)
+   - Use the provided `setup.sh` script, or follow the steps in the script manually (minor modifications might be needed for Mac/Linux users).
 
 ### Deployment Steps
 
 1. **Prepare Configuration:**
    - Copy `terraform.tfvars.example` to `terraform.tfvars`.
    - Fill out the required values in `terraform.tfvars`.
+   - Fill out the required values in `variables.py`
 
-2. **Run the Terraform Workflow:**
+2. **Run the Terraform Workflow Commands:**
    ```bash
    terraform init
    terraform plan
@@ -56,4 +63,4 @@ To deploy this project, ensure the following tools and configurations are in pla
 ## Considerations
 
 - The emails don't replace language learning with courses, apps, or dedicated vocabulary training. It's just a great way to stay engaged with the language.
-- The same goal might be achievable with other automation, code, or no-code tools, but I prefer having industry-wide known services/tools like AWS and Terraform that more people are familiar with.
+- While the same goal could be achieved with other automation, coding, or no-code tools, I prefer using industry-standard services like AWS and Terraform that are widely known and supported.
