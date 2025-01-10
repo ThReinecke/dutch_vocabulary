@@ -1,12 +1,12 @@
 # Daily Vocabulary Email Automation
 
 ## Overview
-This project automates the daily delivery of an email containing three words (language and difficulty of your choice), their translations, and example sentences. The email looks like this:
+This project automates the daily delivery of an email containing three words (language and difficulty of your choice), their translations, and example sentences.
 
-Example email for Dutch, C1 level, with English translations
+**Example email for Dutch, C1 level, with English translations**
 ![Screenshot of Dutch email](/images/email.png)
 
-Example email for French, B2 level, with German translations
+**Example email for French, B2 level, with German translations**
 ![Screenshot of French email](/images/frenchEmail.png)
 
 This project leverages ChatGPT as the vocabulary source. Therefore, the quality of words, translations, and examples for each language depends on ChatGPT's familiarity and knowledge of the desired language.
