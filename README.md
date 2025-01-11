@@ -51,7 +51,7 @@ To deploy this project, ensure the following tools and configurations are in pla
 1. **Prepare Configuration:**
    - Copy `terraform.tfvars.example` to `terraform.tfvars`.
    - Fill out the required values in `terraform.tfvars`.
-   - Fill out the required values in `variables.py`
+   - Fill out the required values in `variables.py`.
 
 2. **Run the Terraform Workflow Commands:**
    ```bash
