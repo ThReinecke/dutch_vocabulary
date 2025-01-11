@@ -7,5 +7,6 @@ cd package
 zip -r ../deployment_package.zip .
 cd ..
 zip deployment_package.zip lambda_function.py
+zip deployment_package.zip variables.py
 rm -r package
 echo "Deployment package created successfully: deployment_package.zip"

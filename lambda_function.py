@@ -2,6 +2,7 @@ import json
 from typing import Any, List, Dict
 import boto3
 from openai import OpenAI
+import variables
 
 # HELPER FUNCTIONS
 
@@ -59,17 +60,21 @@ def put_words_in_db_table(words: List[Dict[str, str]]) -> None:
 
 def create_prompt(existing_words: str) -> str:
     return (
-        f"Provide exactly 3 words in Dutch at the C1 level, but none of "
-        f"those: {existing_words}. Return them as an array of dictionaries. "
-        f"Each dictionary should include the fields: 'word' (the Dutch word), "
-        f"'translation' (the English translation), and 'example' (a sentence "
-        f"using the word in context). Example format: "
-        "[{\"word\": \"word1\", \"translation\": \"example1\", "
-        "\"example\": \"sentence1\"}, {\"word\": \"word2\", "
-        "\"translation\": \"example2\", \"example\": \"sentence2\"}, "
-        "{\"word\": \"word3\", \"translation\": \"example3\", "
-        "\"example\": \"sentence3\"}]. Do not add any additional words, "
-        "explanations, or introductions in your reply."
+        f"Provide exactly 3 words in {variables.language} at the "
+        f"{variables.level} level, but none of those: {existing_words}. "
+        f"Return them as an array of dictionaries. Each dictionary should "
+        f"include the fields: 'word' (the {variables.language} word), "
+        f"'example' (a sentence using the word in context), and "
+        f"'translation' (the {variables.translationLanguage} translation). "
+        f"Example format: "
+        "[{{\"word\": \"word1\", \"example\": \"sentence1\", "
+        "\"translation\": \"example1\"}}, "
+        "{{\"word\": \"word2\", \"example\": \"sentence2\", "
+        "\"translation\": \"example2\"}}, "
+        "{{\"word\": \"word3\", \"example\": \"sentence3\", "
+        "\"translation\": \"example3\"}}]. "
+        "Do not add any additional words, explanations, or introductions "
+        "in your reply."
     )
 
 
@@ -104,8 +109,7 @@ def lambda_handler(event: Any, context: Any) -> Dict[str, Any]:
 
         # Format email for SES
         formatted_html = "<html><body>"
-        formatted_html += "<h2>🇳🇱 Jouw woorden voor "
-        formatted_html += "vandaag</h2>"
+        formatted_html += f"<h2>{variables.emailSubject}</h2>"
         formatted_html += (
             "<table border='1' cellpadding='10' style='border-collapse: "
             "collapse;'>"
@@ -128,7 +132,7 @@ def lambda_handler(event: Any, context: Any) -> Dict[str, Any]:
             Source=ses_email,
             Destination={"ToAddresses": [ses_email]},
             Message={
-                "Subject": {"Data": "📚 Jouw dagelijkse woordenschat"
+                "Subject": {"Data": f"{variables.emailHeader}"
                             },
                 "Body": {"Html": {"Data": formatted_html}},
             },
